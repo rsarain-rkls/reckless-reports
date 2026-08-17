@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reckless Reports — Rodrigo Sarain</title>
+  <link rel="icon" type="image/png" href="/assets/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/style.css">
+  <style>
+    .index-window {
+      max-width: 980px;
+      margin: 0 auto;
+    }
+    .index-header {
+      padding: 52px 0 40px;
+    }
+    .index-eyebrow {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--stone);
+      margin-bottom: 14px;
+    }
+    .index-title {
+      font-size: 52px;
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      line-height: 1.0;
+      color: var(--void);
+    }
+    .index-title .signal { color: var(--signal); }
+    .index-sub {
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--stone);
+      margin-top: 12px;
+    }
+    .index-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 32px 0;
+    }
+    .index-filters {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+    .filter-btn {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 6px 14px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: #fff;
+      color: var(--stone);
+      cursor: pointer;
+      transition: all 0.1s;
+    }
+    .filter-btn.active, .filter-btn:hover {
+      background: var(--void);
+      color: var(--paper);
+      border-color: var(--void);
+    }
+    .section-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--stone);
+      margin-bottom: 16px;
+      margin-top: 40px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="index-window">
+
+  <div class="index-header">
+    <div class="index-eyebrow">Rodrigo Sarain · Reckless Studios</div>
+    <div class="index-title">Reckless<br><span class="signal">Reports</span></div>
+    <div class="index-sub">Reportes de análisis y ejecución. Cada uno es un brief ejecutable.</div>
+  </div>
+
+  <div class="index-divider"></div>
+
+  <div class="section-label">Sistema</div>
+  <div class="index-grid">
+
+    <a class="report-card" href="/reports/analyze-framework/">
+      <div class="rc-mode">Referencia · Framework v1.0</div>
+      <div class="rc-title">RECKLESS ANALYZE — Documentación</div>
+      <div class="rc-sub">Los 5 lentes, 3 modos, 3 sprints. El sistema completo explicado y listo para usar.</div>
+      <div class="rc-date">17 Agosto 2026</div>
+    </a>
+
+  </div>
+
+  <div class="section-label" style="margin-top: 48px;">Reportes generados</div>
+  <div id="reports-grid" class="index-grid">
+    <div style="grid-column: 1 / -1; padding: 40px; text-align: center; border: 1px dashed var(--border); border-radius: 8px; background: #fff;">
+      <p style="color: var(--stone); font-size: 14px; font-weight: 500;">Los reportes aparecen acá cuando usás <strong style="color: var(--void);">/analyze</strong> en Claude Code.</p>
+    </div>
+  </div>
+
+  <div style="margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;">
+    <div style="font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--stone);">Rodrigo Sarain · Reckless Studios</div>
+    <div style="font-size: 11px; font-weight: 500; color: var(--stone);">reckless-reports · Vercel</div>
+  </div>
+
+</div>
+
+</body>
+</html>
