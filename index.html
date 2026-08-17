@@ -3,119 +3,169 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="RECKLESS ANALYZE — Sistema de análisis que convierte cualquier input en un brief ejecutable. Por Rodrigo Sarain · Reckless Studios.">
   <title>Reckless Reports — Rodrigo Sarain</title>
   <link rel="icon" type="image/png" href="./assets/logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./assets/style.css">
-  <style>
-    .index-window {
-      max-width: 980px;
-      margin: 0 auto;
-    }
-    .index-header {
-      padding: 52px 0 40px;
-    }
-    .index-eyebrow {
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--stone);
-      margin-bottom: 14px;
-    }
-    .index-title {
-      font-size: 52px;
-      font-weight: 700;
-      letter-spacing: -0.04em;
-      line-height: 1.0;
-      color: var(--void);
-    }
-    .index-title .signal { color: var(--signal); }
-    .index-sub {
-      font-size: 16px;
-      font-weight: 500;
-      color: var(--stone);
-      margin-top: 12px;
-    }
-    .index-divider {
-      height: 1px;
-      background: var(--border);
-      margin: 32px 0;
-    }
-    .index-filters {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 24px;
-      flex-wrap: wrap;
-    }
-    .filter-btn {
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      padding: 6px 14px;
-      border-radius: 20px;
-      border: 1px solid var(--border);
-      background: #fff;
-      color: var(--stone);
-      cursor: pointer;
-      transition: all 0.1s;
-    }
-    .filter-btn.active, .filter-btn:hover {
-      background: var(--void);
-      color: var(--paper);
-      border-color: var(--void);
-    }
-    .section-label {
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--stone);
-      margin-bottom: 16px;
-      margin-top: 40px;
-    }
-  </style>
 </head>
 <body>
 
-<div class="index-window">
+<div class="page-wrap">
 
-  <div class="index-header">
-    <div class="index-eyebrow">Rodrigo Sarain · Reckless Studios</div>
-    <div class="index-title">Reckless<br><span class="signal">Reports</span></div>
-    <div class="index-sub">Reportes de análisis y ejecución. Cada uno es un brief ejecutable.</div>
-  </div>
+  <!-- Nav -->
+  <nav class="site-nav">
+    <img class="nav-logo" src="./assets/logo.png" alt="Reckless Studios">
+    <ul class="nav-links">
+      <li><a href="#framework">Framework</a></li>
+      <li><a href="#reportes">Reportes</a></li>
+      <li><a href="#request">Solicitar</a></li>
+    </ul>
+  </nav>
 
-  <div class="index-divider"></div>
-
-  <div class="section-label">Sistema</div>
-  <div class="index-grid">
-
-    <a class="report-card" href="/reports/analyze-framework/">
-      <div class="rc-mode">Referencia · Framework v1.0</div>
-      <div class="rc-title">RECKLESS ANALYZE — Documentación</div>
-      <div class="rc-sub">Los 5 lentes, 3 modos, 3 sprints. El sistema completo explicado y listo para usar.</div>
-      <div class="rc-date">17 Agosto 2026</div>
-    </a>
-
-  </div>
-
-  <div class="section-label" style="margin-top: 48px;">Reportes generados</div>
-  <div id="reports-grid" class="index-grid">
-    <div style="grid-column: 1 / -1; padding: 40px; text-align: center; border: 1px dashed var(--border); border-radius: 8px; background: #fff;">
-      <p style="color: var(--stone); font-size: 14px; font-weight: 500;">Los reportes aparecen acá cuando usás <strong style="color: var(--void);">/analyze</strong> en Claude Code.</p>
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-eyebrow">Rodrigo Sarain · Reckless Studios</div>
+    <h1 class="hero-title">Reckless<br><span class="signal">Analyze</span></h1>
+    <p class="hero-sub">Un sistema de análisis que convierte cualquier input — idea, transcript, requerimiento, tarea — en un brief ejecutable con sprint plan incluido.</p>
+    <div class="hero-ctas">
+      <a href="/reports/analyze-framework" class="btn btn-primary">Ver el framework →</a>
+      <a href="#reportes" class="btn btn-secondary">Ver reportes ↓</a>
     </div>
-  </div>
+  </section>
 
-  <div style="margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;">
-    <div style="font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--stone);">Rodrigo Sarain · Reckless Studios</div>
-    <div style="font-size: 11px; font-weight: 500; color: var(--stone);">reckless-reports · Vercel</div>
-  </div>
+  <!-- Cómo funciona — 5 lentes -->
+  <section class="landing-section" id="framework">
+    <div class="section-eyebrow">El método</div>
+    <h2 class="section-title">5 Lentes de Análisis</h2>
+    <p class="section-sub">No son pasos secuenciales. Son filtros que se aplican simultáneamente sobre cualquier input. Cada uno hace una pregunta distinta al mismo material.</p>
 
-</div>
+    <div class="lenses-grid">
+      <div class="lens-card">
+        <div class="lens-top">
+          <div class="lens-num">L1</div>
+          <div class="lens-name">Simple Stick</div>
+        </div>
+        <div class="lens-source">Ken Segall — Insanely Simple</div>
+        <div class="lens-body">Simplicidad como religión. El material debe reducirse a una sola idea, una sola caja. Lo que sobra, sobra.</div>
+        <div class="lens-question">"¿Se puede decir con menos?"</div>
+      </div>
+
+      <div class="lens-card">
+        <div class="lens-top">
+          <div class="lens-num">L2</div>
+          <div class="lens-name">Modos de Ver</div>
+        </div>
+        <div class="lens-source">John Berger — Ways of Seeing</div>
+        <div class="lens-body">Ver no es pasivo — es un acto político. El texto no describe la imagen; la imagen recontextualiza el texto.</div>
+        <div class="lens-question">"¿Qué comunica realmente?"</div>
+      </div>
+
+      <div class="lens-card">
+        <div class="lens-top">
+          <div class="lens-num">L3</div>
+          <div class="lens-name">Free Play</div>
+        </div>
+        <div class="lens-source">Stephen Nachmanovitch — Free Play</div>
+        <div class="lens-body">El impulso inicial es señal, no ruido. Antes de estructurar, buscar qué surge orgánicamente.</div>
+        <div class="lens-question">"¿Dónde está el impulso genuino?"</div>
+      </div>
+
+      <div class="lens-card">
+        <div class="lens-top">
+          <div class="lens-num">L4</div>
+          <div class="lens-name">Jobs To Be Done</div>
+        </div>
+        <div class="lens-source">Christensen / Ulwick</div>
+        <div class="lens-body">La audiencia no consume contenido — lo contrata para que haga un trabajo. Funcional, emocional, o social.</div>
+        <div class="lens-question">"¿Para qué trabajo contratan esto?"</div>
+      </div>
+
+      <div class="lens-card" style="grid-column: 1 / -1;">
+        <div class="lens-top">
+          <div class="lens-num">L5</div>
+          <div class="lens-name">Working Backwards — PR/FAQ</div>
+        </div>
+        <div class="lens-source">Amazon — Colin Bryar &amp; Bill Carr</div>
+        <div class="lens-body">Empezar desde el resultado final. Escribir el comunicado de prensa antes de producir nada. Si no podés escribir el comunicado, no entendés todavía qué estás haciendo.</div>
+        <div class="lens-question">"Si esto funcionó perfectamente, ¿cómo dice el comunicado?"</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 Modos -->
+  <section class="landing-section">
+    <div class="section-eyebrow">Modos de operación</div>
+    <h2 class="section-title">Tres tipos de input.<br>Un solo sistema.</h2>
+
+    <div class="modes-grid">
+      <div class="mode-card">
+        <div class="mode-tag">Contenido</div>
+        <div class="mode-title">Ideas, campañas, lanzamientos</div>
+        <div class="mode-body">Carruseles, guiones, videos, campañas de redes. Transforma ideas en formatos ejecutables con estructura de producción.</div>
+      </div>
+      <div class="mode-card">
+        <div class="mode-title">Requerimientos, sistemas, apps</div>
+        <div class="mode-tag">Software</div>
+        <div class="mode-body">Épicas, historias de usuario, criterios de aceptación BDD, sprints técnicos. Del caos al backlog estructurado.</div>
+      </div>
+      <div class="mode-card">
+        <div class="mode-tag">Lanzamiento</div>
+        <div class="mode-title">Nuevo producto o cliente</div>
+        <div class="mode-body">PR/FAQ completo, mapa de contenido pre-lanzamiento, hoja de ruta 30 días. Para cuando algo nuevo necesita salir al mundo.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Reportes -->
+  <section class="landing-section" id="reportes">
+    <div class="section-eyebrow">Reportes publicados</div>
+    <h2 class="section-title">El sistema en acción</h2>
+    <p class="section-sub">Cada análisis se convierte en un reporte HTML navegable. Los reportes de framework documentan el método. Los reportes de proyecto son briefs ejecutables reales.</p>
+
+    <div style="margin-bottom: 16px;">
+      <div class="section-eyebrow" style="margin-bottom: 12px;">Sistema</div>
+      <div class="reports-index-grid">
+        <a class="report-card" href="/reports/analyze-framework">
+          <div class="rc-mode">Referencia · Framework v1.0</div>
+          <div class="rc-title">RECKLESS ANALYZE — Documentación</div>
+          <div class="rc-sub">Los 5 lentes, 3 modos, 3 sprints. El sistema completo explicado y listo para usar.</div>
+          <div class="rc-date">17 Agosto 2026</div>
+        </a>
+      </div>
+    </div>
+
+    <div>
+      <div class="section-eyebrow" style="margin-bottom: 12px;">Proyectos</div>
+      <div class="reports-index-grid">
+        <div class="empty-state">
+          <p>Los reportes de proyecto aparecen acá.<br>Publicados por <strong style="color: var(--void);">Rodrigo Sarain</strong> · Reckless Studios.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Protección + Request -->
+  <section class="landing-section" id="request">
+    <div class="cta-box">
+      <div class="cta-left">
+        <div class="cta-label">¿Querés un análisis?</div>
+        <div class="cta-title">Trabajemos juntos.</div>
+        <div class="cta-sub">Los reportes son publicados únicamente por Rodrigo Sarain.<br>Si querés un análisis para tu proyecto, escribí directamente.</div>
+      </div>
+      <a class="btn-cta" href="https://instagram.com/rodrigosarain" target="_blank" rel="noopener">Escribir en Instagram →</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-brand">Rodrigo Sarain · Reckless Studios</div>
+    <div class="footer-note">reckless-reports · Vercel · GitHub</div>
+  </footer>
+
+</div><!-- /page-wrap -->
 
 </body>
 </html>
