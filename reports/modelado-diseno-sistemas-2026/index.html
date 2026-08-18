@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modelado y Diseño de Sistemas — Reckless Reports</title>
+  <link rel="icon" type="image/png" href="../../assets/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../assets/style.css">
+  <style>
+    /* ── Custom additions for study guide ── */
+    .study-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .study-table th {
+      background: var(--void); color: var(--paper);
+      font-size: 10px; font-weight: 700; letter-spacing: 0.14em;
+      text-transform: uppercase; padding: 10px 14px; text-align: left;
+    }
+    .study-table td {
+      padding: 11px 14px; border-bottom: 1px solid var(--border);
+      font-weight: 500; color: var(--void); line-height: 1.5; vertical-align: top;
+    }
+    .study-table tr:last-child td { border-bottom: none; }
+    .study-table tr:nth-child(even) td { background: var(--paper); }
+    .study-table td.accent { color: var(--signal); font-weight: 700; }
+    .study-table td.current { background: rgba(217,82,0,0.06); font-weight: 700; }
+    .study-table td.done { color: var(--stone); }
+    .table-wrap { border: 1px solid var(--border); border-radius: var(--r-sm); overflow: hidden; margin-bottom: 16px; }
+
+    /* Code block */
+    .code-block {
+      background: #1A1A1A; border-radius: var(--r-sm);
+      padding: 16px 20px; margin: 12px 0;
+      font-family: 'JetBrains Mono', 'Courier New', monospace;
+      font-size: 12px; line-height: 1.7; color: #D0CEC9;
+      overflow-x: auto; white-space: pre;
+    }
+    .code-block .kw  { color: #D95200; font-weight: 500; }
+    .code-block .cm  { color: #555550; font-style: italic; }
+    .code-block .cl  { color: #FEBC2E; }
+    .code-block .fn  { color: #7EC8A0; }
+    .code-block .st  { color: #A8D4FF; }
+
+    /* Two-col */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+    .two-col-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+    @media (max-width: 640px) { .two-col, .two-col-3 { grid-template-columns: 1fr; } }
+
+    /* Pattern card */
+    .pattern-card {
+      border: 1px solid var(--border); border-radius: var(--r-sm);
+      padding: 16px 18px; background: var(--card-bg);
+    }
+    .pattern-card.signal-border { border-left: 3px solid var(--signal); }
+    .pattern-num { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--stone); margin-bottom: 4px; }
+    .pattern-name { font-size: 15px; font-weight: 700; color: var(--void); margin-bottom: 6px; letter-spacing: -0.01em; }
+    .pattern-question { font-size: 12px; font-weight: 600; color: var(--signal); margin-bottom: 10px; font-style: italic; }
+    .pattern-body { font-size: 13px; font-weight: 500; color: var(--stone); line-height: 1.6; }
+    .pattern-example { font-size: 12px; font-weight: 600; color: var(--void); margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--border); }
+    .pattern-tag { display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 2px 8px; border-radius: var(--r-xs); margin-bottom: 8px; }
+    .tag-creacional { background: rgba(217,82,0,0.10); color: var(--signal); }
+    .tag-estructural { background: rgba(26,26,26,0.08); color: var(--void); }
+    .tag-comportamiento { background: rgba(122,120,114,0.12); color: var(--stone); }
+    .tag-exam { background: var(--signal); color: white; }
+
+    /* Alert / highlight box */
+    .alert-box {
+      background: rgba(217,82,0,0.06); border: 1px solid rgba(217,82,0,0.25);
+      border-left: 3px solid var(--signal); border-radius: 0 var(--r-sm) var(--r-sm) 0;
+      padding: 14px 20px; margin-bottom: 16px;
+    }
+    .alert-box .alert-title { font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--signal); margin-bottom: 6px; }
+    .alert-box .alert-body { font-size: 14px; font-weight: 600; color: var(--void); line-height: 1.6; }
+
+    /* Deep dive section — signal bg header */
+    .deep-section { background: var(--void); border-radius: var(--r-sm); overflow: hidden; margin-bottom: 16px; }
+    .deep-header { background: var(--signal); padding: 14px 20px; display: flex; align-items: center; gap: 12px; }
+    .deep-header-tag { font-size: 10px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(255,255,255,0.7); }
+    .deep-header-title { font-size: 17px; font-weight: 700; color: white; letter-spacing: -0.01em; }
+    .deep-body { padding: 20px 20px; }
+    .deep-body p { font-size: 14px; font-weight: 500; color: #D0CEC9; line-height: 1.7; margin-bottom: 10px; }
+    .deep-body strong { color: var(--paper); }
+    .deep-subhead { font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--signal); margin-bottom: 8px; margin-top: 14px; }
+
+    /* Pill list */
+    .pill-list { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0; }
+    .pill { font-size: 12px; font-weight: 600; padding: 4px 12px; border-radius: 20px; border: 1px solid var(--border); color: var(--stone); background: var(--paper); }
+    .pill.good { background: rgba(40,200,64,0.08); border-color: rgba(40,200,64,0.25); color: #228B22; }
+    .pill.bad  { background: rgba(255,95,87,0.08); border-color: rgba(255,95,87,0.25); color: #C0392B; }
+
+    /* GoF mini ficha */
+    .mini-ficha { border: 1px solid var(--border); border-radius: var(--r-sm); padding: 12px 14px; background: var(--white); }
+    .mini-ficha-name { font-size: 13px; font-weight: 700; color: var(--void); margin-bottom: 4px; }
+    .mini-ficha-body { font-size: 12px; font-weight: 500; color: var(--stone); line-height: 1.5; }
+    .mini-ficha-trap { font-size: 11px; font-style: italic; color: #C0392B; margin-top: 6px; }
+
+    /* Diagram box */
+    .diagram-box {
+      background: #1A1A1A; border-radius: var(--r-sm);
+      padding: 18px 22px; margin: 12px 0;
+      font-family: 'JetBrains Mono', monospace; font-size: 11.5px;
+      line-height: 1.9; color: #A0A09A; overflow-x: auto; white-space: pre;
+    }
+    .diagram-box .hi { color: #D95200; font-weight: 700; }
+    .diagram-box .dim { color: #444440; }
+
+    /* vs comparison */
+    .vs-block { border: 1px solid var(--border); border-radius: var(--r-sm); overflow: hidden; margin-bottom: 12px; }
+    .vs-header { background: var(--paper); padding: 10px 16px; font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--stone); border-bottom: 1px solid var(--border); }
+    .vs-body { padding: 14px 16px; font-size: 13px; font-weight: 500; color: var(--void); line-height: 1.6; background: var(--white); }
+
+    .sec-rule { font-size: 10px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--stone); background: var(--paper); border: 1px solid var(--border); padding: 2px 8px; border-radius: var(--r-xs); }
+  </style>
+</head>
+<body>
+<div class="window-page-wrap">
+<div class="window window-page">
+
+  <div class="window-chrome">
+    <div class="traffic-lights">
+      <div class="tl tl-red"></div>
+      <div class="tl tl-yellow"></div>
+      <div class="tl tl-green"></div>
+    </div>
+    <div class="chrome-title">Modelado y Diseño de Sistemas — Parcial 2 · 2026</div>
+    <div class="chrome-spacer"></div>
+  </div>
+
+  <div class="report-body">
+
+    <!-- HEADER -->
+    <div class="report-header">
+      <div class="header-left">
+        <div class="report-eyebrow">AUSI · UNC ESCMB · Prof. Ing. Fernando Bono · 2026</div>
+        <div class="report-title">Modelado y<br><span class="signal">Diseño de Sistemas</span></div>
+        <div class="report-subtitle">Resumen Parcial 2 — Bloque Diseño completo:<br>Principios · GRASP · GoF · Visitor + Interpreter</div>
+      </div>
+      <div class="header-right">
+        <img class="header-logo" src="../../assets/logo.png" alt="Reckless Studios">
+        <div class="meta-badges">
+          <div class="badge signal-badge">EXAMEN JUEVES</div>
+          <div class="badge mode-badge">Rodrigo Sarain</div>
+          <div class="badge">17 Ago 2026</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 01 MAPA DE LA MATERIA -->
+    <div class="section">
+      <div class="section-header">
+        <span class="sec-num">01</span>
+        <span class="sec-title">Mapa de la Materia — Dónde Estamos</span>
+      </div>
+
+      <div class="table-wrap">
+        <table class="study-table">
+          <thead><tr><th>Bloque</th><th>Tema</th><th>Estado</th></tr></thead>
+          <tbody>
+            <tr><td class="done">B0</td><td class="done">Introducción + Importancia de modelar</td><td class="done">✓ Cerrado</td></tr>
+            <tr><td class="done">B1</td><td class="done">Análisis (Contexto, UC, Dominio, SSD, Estados)</td><td class="done">✓ Cerrado</td></tr>
+            <tr><td class="done">Parcial 1</td><td class="done">Cierre del bloque de Análisis</td><td class="done">✓ Rendido</td></tr>
+            <tr><td class="current">B2 ← ACÁ</td><td class="current">Diseño: Principios · GRASP · GoF · Patrones avanzados</td><td class="current accent">En curso</td></tr>
+            <tr><td>B3</td><td>Arquitectura: Capas · MVC · Microservicios · Event-Driven</td><td>Sigue</td></tr>
+            <tr><td>Parcial 2</td><td>Cierre integral</td><td>Sigue</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="alert-box">
+        <div class="alert-title">La transición clave</div>
+        <div class="alert-body">En B1 analizamos <strong>QUÉ</strong> debe hacer el sistema (caja negra). En B2 diseñamos <strong>CÓMO</strong> lo hace internamente (caja blanca). El diseño no descarta el análisis — lo transforma.</div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="study-table">
+          <thead><tr><th>Dimensión</th><th>Análisis</th><th>Diseño</th></tr></thead>
+          <tbody>
+            <tr><td class="accent">Pregunta</td><td>¿QUÉ debe hacer?</td><td>¿CÓMO lo hace internamente?</td></tr>
+            <tr><td class="accent">Foco</td><td>El problema, el dominio</td><td>La solución, el software</td></tr>
+            <tr><td class="accent">Vista</td><td>Caja negra</td><td>Caja blanca</td></tr>
+            <tr><td class="accent">Artefactos</td><td>Contexto, UC, Dominio, SSD, Estados</td><td>DCD, DSeD (aparecen Controller, Service, Repository)</td></tr>
+            <tr><td class="accent">Métodos en clases</td><td>NO</td><td>SÍ</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 02 LOS 4 PRINCIPIOS -->
+    <div class="section">
+      <div class="section-header">
+        <span class="sec-num">02</span>
+        <span class="sec-title">Los 4 Principios Fundamentales</span>
+      </div>
+
+      <div class="filter-box" style="margin-bottom: 16px;">
+        <div class="filter-label">Regla de Oro — No negociable</div>
+        <div class="filter-statement">ALTA COHESIÓN + BAJO ACOPLAMIENTO</div>
+        <div class="filter-sub">Estos dos solos cubren el 80% de las decisiones de diseño. Todo lo demás (GRASP, GoF, SOLID) es consecuencia de esta regla.</div>
+      </div>
+
+      <div class="two-col">
+        <div class="pattern-card signal-border">
+          <div class="pattern-num">Principio 1</div>
+          <div class="pattern-name">Abstracción</div>
+          <div class="pattern-question">¿Qué muestro y qué oculto?</div>
+          <div class="pattern-body">Mostrar solo lo esencial, ocultar el resto. La clase <code>MedioPago</code> expone <code>cobrar(monto)</code> pero no expone si por dentro habla con Visa, Mastercard o Mercado Pago. Es la base de la encapsulación y las interfaces.</div>
+          <div class="code-block"><span class="kw">interface</span> <span class="cl">MedioPago</span>:
+  <span class="fn">cobrar</span>(monto: Money): Comprobante
+
+<span class="kw">class</span> <span class="cl">PagoEfectivo</span> <span class="kw">implements</span> <span class="cl">MedioPago</span>
+<span class="kw">class</span> <span class="cl">PagoTarjeta</span>  <span class="kw">implements</span> <span class="cl">MedioPago</span>
+<span class="kw">class</span> <span class="cl">PagoQR</span>       <span class="kw">implements</span> <span class="cl">MedioPago</span></div>
+        </div>
+        <div class="pattern-card signal-border">
+          <div class="pattern-num">Principio 2</div>
+          <div class="pattern-name">Modularidad</div>
+          <div class="pattern-question">¿Cómo divido el sistema en partes manejables?</div>
+          <div class="pattern-body">Dividir en módulos (clases, paquetes, capas) que se diseñan por separado. Cada uno cumple una responsabilidad bien definida. Demasiada modularidad → fragmentación. Poca → God Classes.</div>
+          <div class="code-block">ventas/      <span class="cm">← lógica de la venta</span>
+inventario/  <span class="cm">← stock y reposición</span>
+pagos/       <span class="cm">← integraciones</span>
+infra/       <span class="cm">← BD, mensajería</span></div>
+        </div>
+      </div>
+
+      <div class="two-col">
+        <div class="pattern-card">
+          <div class="pattern-num">Principio 3 — Métrica</div>
+          <div class="pattern-name">Cohesión</div>
+          <div class="pattern-question">¿Qué tan relacionadas están las responsabilidades dentro de un módulo?</div>
+          <div class="pattern-body"><strong>Alta cohesión (✓ deseable):</strong> el módulo hace UNA cosa, bien. Ej: <code>CalculadoraImpuestos</code>.<br><br><strong>Baja cohesión (✗ evitar):</strong> el módulo mezcla áreas no relacionadas. Si el nombre necesita "And" → baja cohesión.</div>
+          <div class="pattern-example">Test rápido: ¿el nombre de la clase necesita "And"? → Baja cohesión seguro.</div>
+        </div>
+        <div class="pattern-card">
+          <div class="pattern-num">Principio 4 — Métrica</div>
+          <div class="pattern-name">Acoplamiento</div>
+          <div class="pattern-question">¿Qué tan dependientes son los módulos entre sí?</div>
+          <div class="pattern-body"><strong>Bajo acoplamiento (✓ deseable):</strong> los módulos se comunican por interfaces claras y estables.<br><br><strong>Alto acoplamiento (✗ evitar):</strong> un cambio en uno obliga a cambiar al otro. Efecto dominó.</div>
+          <div class="pattern-example">Tipos (menor → mayor): datos &lt; estructura &lt; control &lt; común &lt; contenido.</div>
+        </div>
+      </div>
+
+      <div class="theme-block">
+        <div class="theme-header">
+          <div class="theme-tag">Larman</div>
+          <div class="theme-name">Responsabilidades: Doing vs Knowing</div>
+        </div>
+        <div class="theme-body">Diseñar es asignar responsabilidades a clases. Una responsabilidad es aquello que un objeto <em>sabe hacer</em> o <em>sabe contestar</em> — no es un método, es una abstracción de mayor nivel.</div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:12px;">
+          <div style="background:var(--white); border:1px solid var(--border); border-radius:var(--r-xs); padding:12px 14px;">
+            <div style="font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--signal);margin-bottom:6px;">DOING — Hacer</div>
+            <div style="font-size:13px;font-weight:500;color:var(--stone);line-height:1.6;">Acciones que realiza el objeto: crear otro objeto, calcular algo, coordinar, delegar.<br><br><strong style="color:var(--void);">Ej:</strong> <code>Venta.calcularTotal()</code> · <code>Cajero.procesarItem()</code></div>
+          </div>
+          <div style="background:var(--white); border:1px solid var(--border); border-radius:var(--r-xs); padding:12px 14px;">
+            <div style="font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--stone);margin-bottom:6px;">KNOWING — Conocer</div>
+            <div style="font-size:13px;font-weight:500;color:var(--stone);line-height:1.6;">Información que mantiene: atributos privados, datos derivados, datos sobre objetos relacionados.<br><br><strong style="color:var(--void);">Ej:</strong> <code>Cliente.dni</code> · <code>Venta.fecha</code> · <code>Producto.stock</code></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 03 GRASP -->
+    <div class="section">
+      <div class="section-header">
+        <span class="sec-num">03</span>
+        <span class="sec-title">Patrones GRASP — 9 Patrones de Asignación de Responsabilidades</span>
+      </div>
+
+      <div class="theme-block">
+        <div class="theme-header">
+          <div class="theme-tag">Larman</div>
+          <div class="theme-name">General Responsibility Assignment Software Patterns</div>
+        </div>
+        <div class="theme-body">No son patrones de código (no se "copia y pega"): son principios de razonamiento. Sirven para decidir <em>dónde</em> poner cada método/responsabilidad, antes del código.</div>
+        <div class="theme-quote">"GRASP responde dónde poner la responsabilidad. GoF da la receta probada para implementarla."</div>
+      </div>
+
+      <div style="font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--stone);margin-bottom:10px;">5 BÁSICOS — Cubren el 80% de decisiones</div>
+
+      <div class="two-col">
+        <div class="pattern-card signal-border">
+          <div class="pattern-num">GRASP 1</div>
+          <div class="pattern-name">Experto (Information Expert)</div>
+          <div class="pattern-question">¿Quién tiene la información para hacerlo?</div>
+          <div class="pattern-body">Asignale la responsabilidad a la clase que tiene la información necesaria para cumplirla. Evita pedir datos a otro objeto para decidir afuera (rompe encapsulación).</div>
+          <div class="pattern-example">ChangoMás: <code>Venta.calcularTotal()</code> — Venta conoce sus ítems → es la experta.</div>
+        </div>
+        <div class="pattern-card signal-border">
+          <div class="pattern-num">GRASP 2</div>
+          <div class="pattern-name">Creador (Creator)</div>
+          <div class="pattern-question">¿Quién debe instanciar este objeto?</div>
+          <div class="pattern-body">B debería crear A si B: <strong>contiene</strong> a A, <strong>agrega</strong> a A, <strong>registra</strong> a A, <strong>usa intensivamente</strong> a A, o <strong>tiene los datos</strong> para inicializarla.</div>
+          <div class="pattern-example">ChangoMás: <code>Venta</code> crea <code>Item</code> (composición). <code>GestorVenta</code> crea <code>Venta</code>.</div>
+        </div>
+      </div>
+
+      <div class="two-col">
+        <div class="pattern-card">
+          <div class="pattern-num">GRASP 3</div>
+          <div class="pattern-name">Bajo Acoplamiento</div>
+          <div class="pattern-question">¿Cómo minimizo dependencias entre clases?</div>
+          <div class="pattern-body">Asigná responsabilidades de modo que minimices el acoplamiento. Delegar a interfaces en vez de clases concretas. Síntoma de falla: cambiar una clase obliga a tocar varias.</div>
+          <div class="pattern-example">ChangoMás: <code>GestorVenta</code> usa <code>Notificador</code> (interfaz), no <code>SMTP</code> directamente.</div>
+        </div>
+        <div class="pattern-card">
+          <div class="pattern-num">GRASP 4</div>
+          <div class="pattern-name">Alta Cohesión</div>
+          <div class="pattern-question">¿Cómo mantengo a cada clase enfocada?</div>
+          <div class="pattern-body">Asigná responsabilidades de modo que cada clase tenga responsabilidades estrechamente relacionadas. Síntoma de falla: nombre genérico (Manager, Helper, Utils) o nombre con "And".</div>
+          <div class="pattern-example">ChangoMás: split de <code>GestorCaja</code> god-class en <code>GestorVenta</code>, <code>Notificador</code>, <code>ServicioFiscal</code>.</div>
+        </div>
+      </div>
+
+      <div class="pattern-card signal-border" style="margin-bottom:16px;">
+        <div class="pattern-num">GRASP 5</div>
+        <div class="pattern-name">Controlador</div>
+        <div class="pattern-question">¿Quién recibe los eventos del sistema?</div>
+        <div class="pattern-body">Asigná la responsabilidad de manejar un evento del sistema a una clase que represente el sistema completo (fachada) o un UC específico. Separa la UI del dominio.<br><br><strong>2 variantes:</strong> Controlador de fachada (1 por sistema) · Controlador de UC (1 por caso de uso) ← más usado en sistemas medianos/grandes.<br><br><strong>Anti-pattern:</strong> Bloated Controller — el controlador que concentra toda la lógica (≈ God Class disfrazada).</div>
+        <div class="pattern-example">ChangoMás: <code>GestorVenta.escanear(codigo)</code> — la UI del cajero no sabe nada de Producto, Stock ni Comprobante.</div>
+      </div>
+
+      <div style="font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--stone);margin-bottom:10px;">4 AVANZADOS — Refinamientos de los básicos</div>
+
+      <div class="two-col">
+        <div class="pattern-card">
+          <div class="pattern-num">GRASP 6</div>
+          <div class="pattern-name">Polimorfismo</div>
+          <div class="pattern-question">¿Cómo manejo variantes de comportamiento?</div>
+          <div class="pattern-body">Cuando un comportamiento varía según el tipo, asignalo a una jerarquía de clases usando una operación polimórfica. Elimina los <code>if/switch</code> por tipo (anti-pattern: Type Check). Extensible sin romper el código existente (Open/Closed).</div>
+          <div class="pattern-example">ChangoMás: <code>MedioPago.cobrar()</code> — agregar <code>PagoCripto</code> = solo una clase nueva.</div>
+        </div>
+        <div class="pattern-card">
+          <div class="pattern-num">GRASP 7</div>
+          <div class="pattern-name">Fabricación Pura (Pure Fabrication)</div>
+          <div class="pattern-question">¿Y si no hay clase de dominio que sirva?</div>
+          <div class="pattern-body">Cuando ningún concepto del dominio sirve como casa natural de una responsabilidad (o ponerla rompería su cohesión), inventá una clase nueva que no represente un concepto del dominio.</div>
+          <div class="pattern-example">ChangoMás: <code>RepositorioVenta</code> — Venta no debería saber de JDBC ni SQL. Se crea una clase técnica.</div>
+        </div>
+      </div>
+
+      <div class="two-col">
+        <div class="pattern-card">
+          <div class="pattern-num">GRASP 8</div>
+          <div class="pattern-name">Indirección</div>
+          <div class="pattern-question">¿Cómo evito el acoplamiento directo?</div>
+          <div class="pattern-body">Para evitar el acoplamiento directo entre dos clases, ponelas a comunicar a través de un objeto intermediario. Permite cambiar el lado A sin afectar al B.</div>
+          <div class="pattern-example">ChangoMás: <code>ServicioFiscal</code> intermedia entre <code>Venta</code> y AFIP. Si AFIP cambia protocolo, solo toca ServicioFiscal.</div>
+        </div>
+        <div class="pattern-card">
+          <div class="pattern-num">GRASP 9</div>
+          <div class="pattern-name">Law of Demeter</div>
+          <div class="pattern-question">"No hables con extraños" — ¿Con quién puedo hablar?</div>
+          <div class="pattern-body">Un método solo puede invocar métodos de: <strong>this</strong>, sus <strong>atributos directos</strong>, sus <strong>parámetros</strong>, objetos que <strong>crea internamente</strong>. Evita los "trenes de getters" (<code>a.getB().getC().getD()</code>).</div>
+          <div class="pattern-example">MAL: <code>venta.getCliente().getDireccion().getCalle()</code><br>BIEN: <code>venta.obtenerCalleEntrega()</code> (delegación interna).</div>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="study-table">
+          <thead><tr><th>Patrón</th><th>Pregunta que responde</th><th>Ejemplo ChangoMás</th><th>SOLID relacionado</th></tr></thead>
+          <tbody>
+            <tr><td class="accent">Experto</td><td>¿Quién tiene los datos?</td><td><code>Venta.calcularTotal()</code></td><td>SRP</td></tr>
+            <tr><td class="accent">Creador</td><td>¿Quién instancia?</td><td><code>Venta</code> crea <code>Item</code></td><td>—</td></tr>
+            <tr><td class="accent">Bajo Acoplamiento</td><td>¿Cómo minimizo dependencias?</td><td><code>Notificador</code> interfaz</td><td>DIP</td></tr>
+            <tr><td class="accent">Alta Cohesión</td><td>¿Cómo mantengo enfoque?</td><td>Split de <code>GestorCaja</code></td><td>SRP</td></tr>
+            <tr><td class="accent">Controlador</td><td>¿Quién recibe el evento?</td><td><code>GestorVenta</code> para UC venta</td><td>SRP</td></tr>
+            <tr><td class="accent">Polimorfismo</td><td>¿Variantes de comportamiento?</td><td><code>MedioPago.cobrar()</code></td><td>OCP + LSP</td></tr>
+            <tr><td class="accent">Fabricación Pura</td><td>¿Sin clase de dominio natural?</td><td><code>RepositorioVenta</code></td><td>SRP</td></tr>
+            <tr><td class="accent">Indirección</td><td>¿Evitar acoplamiento directo?</td><td><code>ServicioFiscal</code> AFIP</td><td>ISP</td></tr>
+            <tr><td class="accent">Law of Demeter</td><td>¿Con quién puedo hablar?</td><td><code>venta.obtenerCalleEntrega()</code></td><td>—</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 04 GoF -->
+    <div class="section">
+      <div class="section-header">
+        <span class="sec-num">04</span>
+        <span class="sec-title">Patrones GoF — Gang of Four (23 patrones)</span>
+      </div>
+
+      <div class="theme-block">
+        <div class="theme-header">
+          <div class="theme-tag">Gamma, Helm, Johnson, Vlissides — 1994</div>
+          <div class="theme-name">GRASP es el razonamiento. GoF es la receta probada para problemas comunes.</div>
+        </div>
+        <div class="theme-body">GoF NO es una biblioteca para copiar y pegar. No se "tienen que usar todos". El mejor patrón es el que el junior del equipo entiende en 2 minutos.</div>
+        <div class="theme-quote">"Meté un patrón cuando aparece la segunda variante, no la primera." — Regla de oro anti-patternitis</div>
+      </div>
+
+      <div class="two-col-3" style="margin-bottom:16px;">
+        <div style="background:rgba(217,82,0,0.06);border:1px solid rgba(217,82,0,0.2);border-radius:var(--r-sm);padding:14px 16px;">
+          <div style="font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--signal);margin-bottom:8px;">Creacionales (5)</div>
+          <div style="font-size:13px;font-weight:500;color:var(--void);line-height:1.7;">Cómo se crean los objetos<br><br>Singleton · Factory Method · Abstract Factory · Builder · Prototype</div>
+        </div>
+        <div style="background:rgba(26,26,26,0.04);border:1px solid var(--border);border-radius:var(--r-sm);padding:14px 16px;">
+          <div style="font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--void);margin-bottom:8px;">Estructurales (7)</div>
+          <div style="font-size:13px;font-weight:500;color:var(--void);line-height:1.7;">Cómo se componen las clases<br><br>Adapter · Bridge · Composite · Decorator · Facade · Flyweight · Proxy</div>
+        </div>
+        <div style="background:rgba(122,120,114,0.06);border:1px solid var(--border);border-radius:var(--r-sm);padding:14px 16px;">
+          <div style="font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--stone);margin-bottom:8px;">Comportamiento (11)</div>
+          <div style="font-size:13px;font-weight:500;color:var(--void);line-height:1.7;">Cómo colaboran y comunican<br><br>Chain of Resp. · Command · Iterator · Mediator · Memento · Observer · State · Strategy · Template Method · <strong>Visitor · Interpreter</strong></div>
+        </div>
+      </div>
+
+      <div style="font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--stone);margin-bottom:12px;">Los 7 Principales — En Detalle</div>
+
+      <!-- Singleton -->
+      <div class="theme-block" style="margin-bottom:10px;">
+        <div class="theme-header">
+          <div class="pattern-tag tag-creacional">Creacional</div>
+          <div class="theme-name">1 · Singleton</div>
+        </div>
+        <div class="theme-body"><strong>Intención:</strong> Garantizar que una clase tenga UNA sola instancia y proveer un punto de acceso global. <strong>Cuándo:</strong> configuración global, pool de conexiones, caché compartida. <strong>Trampa:</strong> hace el código difícil de testear (estado global). Se abusa para "compartir cosas" → termina siendo un God Object.</div>
+        <div class="code-block"><span class="kw">class</span> <span class="cl">ConfiguracionPOS</span>:
+  _instancia = <span class="kw">None</span>
+  <span class="kw">@staticmethod</span>
+  <span class="kw">def</span> <span class="fn">get</span>():
+    <span class="kw">if</span> ConfiguracionPOS._instancia <span class="kw">is</span> <span class="kw">None</span>:
+      ConfiguracionPOS._instancia = <span class="cl">ConfiguracionPOS</span>()
+    <span class="kw">return</span> ConfiguracionPOS._instancia</div>
+      </div>
+
+      <!-- Factory Method -->
+      <div class="theme-block" style="margin-bottom:10px;">
+        <div class="theme-header">
+          <div class="pattern-tag tag-creacional">Creacional</div>
+          <div class="theme-name">2 · Factory Method</div>
+        </div>
+        <div class="theme-body"><strong>Intención:</strong> Definir una interfaz para crear un objeto, pero dejar que las subclases decidan qué clase concreta instanciar. <strong>Cuándo:</strong> la decisión de qué tipo crear depende de un parámetro. <strong>Conexión GRASP:</strong> Pure Fabrication + Polimorfismo + Bajo Acoplamiento.</div>
+        <div class="code-block"><span class="kw">class</span> <span class="cl">MedioPagoFactory</span>:
+  <span class="kw">@staticmethod</span>
+  <span class="kw">def</span> <span class="fn">crear</span>(tipo: str) -> <span class="cl">MedioPago</span>:
+    <span class="kw">if</span> tipo == <span class="st">"EFECTIVO"</span>: <span class="kw">return</span> <span class="cl">PagoEfectivo</span>()
+    <span class="kw">if</span> tipo == <span class="st">"TARJETA"</span>:  <span class="kw">return</span> <span class="cl">PagoTarjeta</span>(...)
+    <span class="kw">if</span> tipo == <span class="st">"QR"</span>:       <span class="kw">return</span> <span class="cl">PagoQR</span>(...)
+    <span class="kw">raise</span> TipoDePagoDesconocido(tipo)</div>
+      </div>
+
+      <!-- Adapter -->
+      <div class="theme-block" style="margin-bottom:10px;">
+        <div class="theme-header">
+          <div class="pattern-tag tag-estructural">Estructural</div>
+          <div class="theme-name">3 · Adapter</div>
+        </div>
+        <div class="theme-body"><strong>Intención:</strong> Convertir la interfaz de una clase en otra que el cliente espera. Permite que clases incompatibles colaboren. <strong>Cuándo:</strong> librería externa con API que no encaja, sistema legacy que convive con el nuevo. <strong>Trampa:</strong> no usar Adapter para parchear una mala interfaz propia — si es tuya, corregila.</div>
+        <div class="pattern-example">ChangoMás: <code>ImpresoraLegacyAdapter</code> envuelve <code>LegacyTicketPrinter</code> y expone la interfaz limpia <code>Impresora.imprimir(ticket)</code>. GestorVenta no sabe que hay una legacy.</div>
+      </div>
+
+      <!-- Decorator -->
+      <div class="theme-block" style="margin-bottom:10px;">
+        <div class="theme-header">
+          <div class="pattern-tag tag-estructural">Estructural</div>
+          <div class="theme-name">4 · Decorator</div>
+        </div>
+        <div class="theme-body"><strong>Intención:</strong> Agregar responsabilidades a un objeto dinámicamente, sin alterar su clase original. Alternativa a la herencia múltiple para combinar comportamientos opcionales. <strong>Cuándo:</strong> querés combinar features sin explotar en N subclases.</div>
+        <div class="code-block"><span class="kw">interface</span> <span class="cl">Cobrable</span>:
+  <span class="fn">precio</span>(): Money
+
+<span class="kw">class</span> <span class="cl">Item</span> <span class="kw">implements</span> <span class="cl">Cobrable</span>: ...
+
+<span class="kw">class</span> <span class="cl">DescuentoTarjeta</span> <span class="kw">implements</span> <span class="cl">Cobrable</span>:
+  base: Cobrable; porcentaje: int
+  <span class="fn">precio</span>(): <span class="kw">return</span> base.precio() * (1 - porcentaje/100)
+
+<span class="cm"># Apilable: DescuentoTarjeta(Promocion2x1(item))</span></div>
+      </div>
+
+      <!-- Strategy -->
+      <div class="theme-block" style="margin-bottom:10px;">
+        <div class="theme-header">
+          <div class="pattern-tag tag-comportamiento">Comportamiento</div>
+          <div class="theme-name">5 · Strategy</div>
+        </div>
+        <div class="theme-body"><strong>Intención:</strong> Definir una familia de algoritmos, encapsular cada uno, y hacerlos intercambiables. <strong>Cuándo:</strong> tenés varias formas de hacer lo mismo y la elección depende del contexto. Elimina los if/switch enormes por tipo. <strong>Conexión GRASP:</strong> Polimorfismo elevado a patrón concreto.</div>
+        <div class="code-block"><span class="kw">interface</span> <span class="cl">CalculadoraIVA</span>:
+  <span class="fn">calcular</span>(precio: Money): Money
+
+<span class="kw">class</span> <span class="cl">IVA21</span>       <span class="kw">implements</span> <span class="cl">CalculadoraIVA</span>  <span class="cm"># general</span>
+<span class="kw">class</span> <span class="cl">IVA105</span>      <span class="kw">implements</span> <span class="cl">CalculadoraIVA</span>  <span class="cm"># carne, pan, frutas</span>
+<span class="kw">class</span> <span class="cl">IVAExento</span>   <span class="kw">implements</span> <span class="cl">CalculadoraIVA</span>  <span class="cm"># libros, leche</span></div>
+      </div>
+
+      <!-- Observer -->
+      <div class="theme-block" style="margin-bottom:10px;">
+        <div class="theme-header">
+          <div class="pattern-tag tag-comportamiento">Comportamiento</div>
+          <div class="theme-name">6 · Observer</div>
+        </div>
+        <div class="theme-body"><strong>Intención:</strong> Definir dependencia 1-a-N entre objetos: cuando uno cambia de estado, todos sus dependientes son notificados. <strong>Cuándo:</strong> varios objetos reaccionan al mismo evento sin que el publicador sepa quiénes son. <strong>Trampa:</strong> si los observadores tardan, bloquean al publicador → async.</div>
+        <div class="code-block"><span class="kw">class</span> <span class="cl">Venta</span>:
+  observadores: List[<span class="cl">ObservadorVenta</span>]
+  <span class="kw">def</span> <span class="fn">cerrar</span>(self):
+    self.estado = <span class="st">"CERRADA"</span>
+    <span class="kw">for</span> obs <span class="kw">in</span> self.observadores: obs.alCerrar(self)
+
+<span class="kw">class</span> <span class="cl">EmisorComprobante</span>   <span class="kw">implements</span> <span class="cl">ObservadorVenta</span>
+<span class="kw">class</span> <span class="cl">ActualizadorStock</span>   <span class="kw">implements</span> <span class="cl">ObservadorVenta</span>
+<span class="kw">class</span> <span class="cl">RegistroFidelizacion</span> <span class="kw">implements</span> <span class="cl">ObservadorVenta</span></div>
+      </div>
+
+      <!-- State -->
+      <div class="theme-block" style="margin-bottom:16px;">
+        <div class="theme-header">
+          <div class="pattern-tag tag-comportamiento">Comportamiento</div>
+          <div class="theme-name">7 · State</div>
+        </div>
+        <div class="theme-body"><strong>Intención:</strong> Permitir que un objeto cambie su comportamiento cuando cambia su estado interno. <strong>Cuándo:</strong> entidad con ciclo de vida bien definido (los estados del análisis). Elimina el if/switch por <code>self.estado</code> en cada método. <strong>Conexión directa:</strong> el Diagrama de Estados de B1 se traduce directamente a State pattern.</div>
+        <div class="pattern-example">ChangoMás: <code>Venta</code> → estados <code>Abierta → Cerrada → Facturada → Cancelada</code>. En cada estado las operaciones permitidas cambian. State encapsula cada estado en su propia clase.</div>
+      </div>
+
+      <div style="font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--stone);margin-bottom:12px;">Los 16 Restantes — Mini-fichas de Referencia</div>
+
+      <div class="two-col">
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div class="mini-ficha"><div class="mini-ficha-name"><span class="pattern-tag tag-creacional" style="margin-right:6px;">C</span>Abstract Factory</div><div class="mini-ficha-body">Crear familias de objetos relacionados sin especificar clases concretas. Ej: <code>SetDispositivosCajaTradicional</code> vs <code>SetDispositivosAutoservicio</code>.</div><div class="mini-ficha-trap">Trampa: sobrediseño cuando hay solo una familia real.</div></div>
+          <div class="mini-ficha"><div class="mini-ficha-name"><span class="pattern-tag tag-creacional" style="margin-right:6px;">C</span>Builder</div><div class="mini-ficha-body">Construir objetos complejos paso a paso separando construcción y representación. Ej: <code>ComprobanteFiscalBuilder</code>.</div><div class="mini-ficha-trap">Trampa: para objetos simples de 2-3 campos, sobra completamente.</div></div>
+          <div class="mini-ficha"><div class="mini-ficha-name"><span class="pattern-tag tag-creacional" style="margin-right:6px;">C</span>Prototype</div><div class="mini-ficha-body">Crear nuevos objetos clonando un prototipo existente. Ej: clonar plantilla de promoción y ajustar % por sucursal.</div><div class="mini-ficha-trap">Trampa: clonado superficial vs profundo — bug clásico con referencias compartidas.</div></div>
+          <div class="mini-ficha"><div class="mini-ficha-name"><span class="pattern-tag tag-estructural" style="margin-right:6px;">E</span>Bridge</div><div class="mini-ficha-body">Desacoplar abstracción de implementación para que evolucionen independiente. Ej: <code>MedioPago</code> (abstracción) × <code>PasarelaTarjeta</code> (implementación).</div><div class="mini-ficha-trap">Trampa: sobreingeniería si hay solo una implementación.</div></div>
+          <div class="mini-ficha"><div class="mini-ficha-name"><span class="pattern-tag tag-estructural" style="margin-right:6px;">E</span>Composite</div><div class="mini-ficha-body">Tratar objetos individuales y compuestos uniformemente. Ej: <code>Item</code> y <code>Combo</code> ambos implementan <code>Vendible.calcularPrecio()</code>.</div><div class="mini-ficha-trap">Trampa: cuando la jerarquía real no es uniforme, se fuerza un diseño raro.</div></div>
+          <div class="mini-ficha"><div class="mini-ficha-name"><span class="pattern-tag tag-estructural" style="margin-right:6px;">E</span>Facade</div><div class="mini-ficha-body">Proveer interfaz simple a un subsistema complejo. Ej: <code>FacadeAFIP</code> esconde 12 webservices detrás de <code>emitir(venta)</code>.</div><div class="mini-ficha-trap">Trampa: Facade gigante que termina siendo un God Object.</div></div>
+          <div class="mini-ficha"><div class="mini-ficha-name"><span class="pattern-tag tag-estructural" style="margin-right:6px;">E</span>Flyweight</div><div class="mini-ficha-body">Compartir objetos comunes para ahorrar memoria. Ej: datos compartidos de 80k productos cacheados una sola vez.</div><div class="mini-ficha-trap">Trampa: premature optimization si la memoria no es un problema real.</div></div>
+          <div class="mini-ficha"><div class="mini-ficha-name"><span class="pattern-tag tag-estructural" style="margin-right:6px;">E</span>Proxy</div><div class="mini-ficha-body">Sustituto que controla el acceso a otro objeto (lazy load, cache, auth, logging). Ej: <code>ProxyStockRemoto</code> cachea y sirve último valor si el central está caído.</div><div class="mini-ficha-trap">Trampa: Proxy que termina haciendo más que controlar (= sin cohesión).</div></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div class="mini-ficha"><div class="mini-ficha-name"><span class="pattern-tag tag-comportamiento" style="margin-right:6px;">B</span>Chain of Responsibility</div><div class="mini-ficha-body">Pasar una request por cadena de handlers hasta que uno la atienda. Ej: <code>ValidadorStock → ValidadorPromo → ValidadorPago → ValidadorFiscal</code>.</div><div class="mini-ficha-trap">Trampa: cadenas largas y opacas donde nadie sabe qué orden importa.</div></div>
+          <div class="mini-ficha"><div class="mini-ficha-name"><span class="pattern-tag tag-comportamiento" style="margin-right:6px;">B</span>Command</div><div class="mini-ficha-body">Encapsular una operación como objeto (parámetros, undo, queue, logging). Ej: <code>EscanearProductoCommand</code> que se puede deshacer.</div><div class="mini-ficha-trap">Trampa: sumar Command para operaciones triviales que no necesitan undo ni queue.</div></div>
+          <div class="mini-ficha"><div class="mini-ficha-name"><span class="pattern-tag tag-comportamiento" style="margin-right:6px;">B</span>Iterator</div><div class="mini-ficha-body">Recorrer una colección sin exponer su estructura interna. Ej: <code>Venta.iterator()</code> sin exponer si por dentro es lista, set o tree.</div><div class="mini-ficha-trap">Trampa: en lenguajes con for-each nativo, implementarlo a mano es ruido.</div></div>
+          <div class="mini-ficha"><div class="mini-ficha-name"><span class="pattern-tag tag-comportamiento" style="margin-right:6px;">B</span>Mediator</div><div class="mini-ficha-body">Centralizar comunicación entre varios objetos para reducir acoplamiento N-a-N. Ej: <code>MediadorCaja</code> coordina pantalla, display, cajón, impresora.</div><div class="mini-ficha-trap">Trampa: Mediator que se vuelve un God Object con toda la lógica.</div></div>
+          <div class="mini-ficha"><div class="mini-ficha-name"><span class="pattern-tag tag-comportamiento" style="margin-right:6px;">B</span>Memento</div><div class="mini-ficha-body">Capturar el estado interno de un objeto para restaurarlo después (undo). Ej: <code>SnapshotVenta</code> para deshacer hasta 5 pasos.</div><div class="mini-ficha-trap">Trampa: snapshot pesado de objetos grandes = memoria explota.</div></div>
+          <div class="mini-ficha"><div class="mini-ficha-name"><span class="pattern-tag tag-comportamiento" style="margin-right:6px;">B</span>Template Method</div><div class="mini-ficha-body">Definir el esqueleto de un algoritmo en la clase base, dejando que subclases completen los pasos. Ej: <code>ProcesoCierreVentaBase.ejecutar()</code> define el flujo.</div><div class="mini-ficha-trap">Trampa: herencia rígida — muchas veces Strategy es más flexible.</div></div>
+          <div class="mini-ficha" style="border:1px solid rgba(217,82,0,0.3);"><div class="mini-ficha-name"><span class="pattern-tag tag-exam" style="margin-right:6px;">EXAMEN</span>Visitor</div><div class="mini-ficha-body">Definir nuevas operaciones sobre jerarquía de objetos sin modificar las clases. Doble despacho. Ver Sección 05 ↓</div></div>
+          <div class="mini-ficha" style="border:1px solid rgba(217,82,0,0.3);"><div class="mini-ficha-name"><span class="pattern-tag tag-exam" style="margin-right:6px;">EXAMEN</span>Interpreter</div><div class="mini-ficha-body">Definir una gramática y un intérprete para un mini-lenguaje. Cada regla gramatical = una clase. Ver Sección 05 ↓</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 05 DEEP DIVE VISITOR + INTERPRETER -->
+    <div class="section">
+      <div class="section-header">
+        <span class="sec-num">05</span>
+        <span class="sec-title">Deep Dive — <span style="color:var(--signal);">Visitor + Interpreter</span> <span class="sec-rule">EXAMEN JUEVES</span></span>
+      </div>
+
+      <div class="alert-box">
+        <div class="alert-title">Por qué estos dos van juntos</div>
+        <div class="alert-body">Interpreter construye el árbol de objetos (la estructura). Visitor recorre ese árbol y le aplica operaciones sin tocar las clases del árbol. Son complementarios: <strong>Interpreter crea la gramática, Visitor opera sobre ella.</strong></div>
+      </div>
+
+      <!-- VISITOR -->
+      <div class="deep-section">
+        <div class="deep-header">
+          <div class="deep-header-tag">GoF #22 · Comportamiento</div>
+          <div class="deep-header-title">Visitor — Double Dispatch</div>
+        </div>
+        <div class="deep-body">
+          <div class="deep-subhead">Definición canónica</div>
+          <p>"Represent an operation to be performed on the elements of an object structure. Visitor lets you define a new operation <strong>without changing the classes</strong> of the elements on which it operates." — GoF 1994</p>
+
+          <div class="deep-subhead">Idea central</div>
+          <p>Visitor <strong>separa un algoritmo de la estructura de objetos</strong> sobre la que opera. Cada elemento expone <code>accept(visitor)</code>, que le devuelve el control al visitor mediante <strong>doble despacho (double dispatch)</strong>: el tipo real del nodo Y del visitor deciden qué método corre en tiempo de ejecución.</p>
+
+          <div class="deep-subhead">Diagrama de clases canónico</div>
+          <div class="diagram-box"><span class="hi">&lt;&lt;interface&gt;&gt;</span>              <span class="hi">&lt;&lt;interface&gt;&gt;</span>
+<span class="hi">ReglaExpresion</span>                <span class="hi">ReglaVisitor</span>
++accept(v): T    &lt;=========&gt;  +visitAnd(r): T
+      /\                        +visitMontoMayorQue(r): T
+  ____|____                           /\
+  |    |   |                  ________|________
+Monto Tiene And               |        |        |
+Mayor Categ                Evaluar Explicar Auditoria
+ Que                       Visitor Visitor  Visitor
+
+<span class="dim">Doble despacho: el tipo real del nodo Y del visitor deciden qué método corre.</span></div>
+
+          <div class="deep-subhead">Código ejemplo — Caso motor de descuentos</div>
+        </div>
+      </div>
+
+      <div class="code-block"><span class="kw">interface</span> <span class="cl">ReglaVisitor</span>[T]:
+  <span class="fn">visitMontoMayorQue</span>(r): T
+  <span class="fn">visitTieneCategoria</span>(r): T
+  <span class="fn">visitAnd</span>(r): T
+
+<span class="kw">interface</span> <span class="cl">ReglaExpresion</span>:
+  <span class="fn">accept</span>(v: ReglaVisitor): T
+
+<span class="kw">class</span> <span class="cl">And</span> <span class="kw">implements</span> <span class="cl">ReglaExpresion</span>:
+  izq: ReglaExpresion; der: ReglaExpresion
+  <span class="kw">def</span> <span class="fn">accept</span>(self, v):
+    <span class="kw">return</span> v.visitAnd(self)    <span class="cm"># delega al visitor → double dispatch</span>
+
+<span class="kw">class</span> <span class="cl">EvaluarVisitor</span> <span class="kw">implements</span> <span class="cl">ReglaVisitor</span>:
+  <span class="kw">def</span> <span class="fn">visitMontoMayorQue</span>(self, r):
+    <span class="kw">return</span> self.carrito.total > r.monto
+  <span class="kw">def</span> <span class="fn">visitAnd</span>(self, r):
+    <span class="kw">return</span> r.izq.accept(self) <span class="kw">and</span> r.der.accept(self)
+
+<span class="cm"># La MISMA regla, tres operaciones, CERO cambios en MontoMayorQue / And:</span>
+regla.accept(<span class="cl">EvaluarVisitor</span>(carrito))    <span class="cm"># true/false</span>
+regla.accept(<span class="cl">ExplicarVisitor</span>())           <span class="cm"># texto legible</span>
+regla.accept(<span class="cl">AuditoriaVisitor</span>(ventaId))   <span class="cm"># JSON para logs</span></div>
+
+      <div class="two-col" style="margin-top:12px;">
+        <div class="vs-block">
+          <div class="vs-header" style="color:#228B22;">Cuándo SÍ usar Visitor</div>
+          <div class="vs-body">
+            <div class="pill-list">
+              <span class="pill good">Jerarquía estable</span>
+              <span class="pill good">Operaciones nuevas frecuentes</span>
+              <span class="pill good">Separar responsabilidades</span>
+              <span class="pill good">Recorridos compartidos</span>
+            </div>
+            Los tipos de nodo cambian poco, pero se necesitan operaciones nuevas seguido (evaluar, explicar, auditar, exportar, migrar). Las clases de dominio quedan libres de lógica de presentación, logging o serialización.
+          </div>
+        </div>
+        <div class="vs-block">
+          <div class="vs-header" style="color:#C0392B;">Cuándo NO usar Visitor</div>
+          <div class="vs-body">
+            <div class="pill-list">
+              <span class="pill bad">Jerarquía volátil</span>
+              <span class="pill bad">Pocas operaciones (1-2)</span>
+              <span class="pill bad">Testing aislado difícil</span>
+            </div>
+            Si los tipos de nodo cambian seguido → agregar uno obliga a modificar TODOS los Visitors (rompe Open/Closed al revés). Con 1-2 operaciones estables alcanza un método virtual simple. Cada Visitor concreto conoce todas las clases concretas.
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- INTERPRETER -->
+      <div class="deep-section" style="margin-top:16px;">
+        <div class="deep-header">
+          <div class="deep-header-tag">GoF #23 · Comportamiento</div>
+          <div class="deep-header-title">Interpreter — Gramática como Objetos</div>
+        </div>
+        <div class="deep-body">
+          <div class="deep-subhead">Definición canónica</div>
+          <p>"Given a language, define a representation for its grammar along with an interpreter that uses the representation to interpret sentences in the language." — GoF 1994</p>
+
+          <div class="deep-subhead">Idea central</div>
+          <p>Dado un <strong>lenguaje</strong> (gramática simple), Interpreter representa cada regla gramatical como una clase capaz de interpretarse a sí misma. Una expresión compleja se arma combinando expresiones más chicas (<strong>≈ Composite</strong>); cada nodo evalúa su propia porción de la sentencia.</p>
+
+          <div class="deep-subhead">Diagrama de clases canónico</div>
+          <div class="diagram-box"><span class="hi">&lt;&lt;interface&gt;&gt;</span>
+<span class="hi">ReglaExpresion</span>
++ interpretar(carrito): bool
+      /\
+  ____|_________
+  |             |
+Terminal     NoTerminal
+Expression   Expression (Composite)
+
+MontoMayorQue    And / Or / Not
+TieneCategoria   − izquierda: Regla
+EsClientePremium − derecha:   Regla
++interpretar()   +interpretar(): combina hijos</div>
+
+          <div class="deep-subhead">Código ejemplo — Reglas de descuento e-commerce</div>
+        </div>
+      </div>
+
+      <div class="code-block"><span class="kw">interface</span> <span class="cl">ReglaExpresion</span>:
+  <span class="fn">interpretar</span>(carrito: Carrito): bool
+
+<span class="kw">class</span> <span class="cl">MontoMayorQue</span> <span class="kw">implements</span> <span class="cl">ReglaExpresion</span>:  <span class="cm"># Terminal</span>
+  <span class="kw">def</span> <span class="fn">__init__</span>(self, monto): self.monto = monto
+  <span class="kw">def</span> <span class="fn">interpretar</span>(self, carrito):
+    <span class="kw">return</span> carrito.total > self.monto
+
+<span class="kw">class</span> <span class="cl">TieneCategoria</span> <span class="kw">implements</span> <span class="cl">ReglaExpresion</span>:   <span class="cm"># Terminal</span>
+  <span class="kw">def</span> <span class="fn">interpretar</span>(self, carrito):
+    <span class="kw">return</span> carrito.tieneCategoria(self.cat)
+
+<span class="kw">class</span> <span class="cl">And</span> <span class="kw">implements</span> <span class="cl">ReglaExpresion</span>:              <span class="cm"># NoTerminal (combina)</span>
+  <span class="kw">def</span> <span class="fn">__init__</span>(self, izq, der):
+    self.izq, self.der = izq, der
+  <span class="kw">def</span> <span class="fn">interpretar</span>(self, carrito):
+    <span class="kw">return</span> (self.izq.interpretar(carrito) <span class="kw">and</span>
+            self.der.interpretar(carrito))
+
+<span class="cm"># "total > 50000 AND categoria = Electronica"</span>
+regla = <span class="cl">And</span>(<span class="cl">MontoMayorQue</span>(50000), <span class="cl">TieneCategoria</span>(<span class="st">"Electronica"</span>))
+aplica = regla.interpretar(carritoDelCliente)   <span class="cm"># → True/False</span></div>
+
+      <div class="two-col" style="margin-top:12px;">
+        <div class="vs-block">
+          <div class="vs-header" style="color:#228B22;">Cuándo SÍ usar Interpreter</div>
+          <div class="vs-body">
+            <div class="pill-list">
+              <span class="pill good">Gramática simple</span>
+              <span class="pill good">Reglas volátiles</span>
+              <span class="pill good">Piezas reusables</span>
+            </div>
+            Pocos tipos de terminales y combinadores (AND/OR/NOT). Reglas que cambian más que el código (Marketing configura vía panel). Las mismas terminales se recombinan en muchas reglas distintas.
+          </div>
+        </div>
+        <div class="vs-block">
+          <div class="vs-header" style="color:#C0392B;">Cuándo NO usar Interpreter</div>
+          <div class="vs-body">
+            <div class="pill-list">
+              <span class="pill bad">Gramáticas complejas</span>
+              <span class="pill bad">Vocabulario sin límite</span>
+              <span class="pill bad">Alto volumen</span>
+            </div>
+            Gramáticas con precedencia, funciones, strings → usar parser real (ANTLR). Cada condición nueva = una clase Terminal nueva. Recorrer árbol por evaluación es más lento que código compilado.
+          </div>
+        </div>
+      </div>
+
+      <!-- Comparación Visitor vs Interpreter -->
+      <div class="filter-box" style="margin-top:16px;">
+        <div class="filter-label">Visitor vs Interpreter — La diferencia clave</div>
+        <div class="filter-statement">Interpreter crea la estructura. Visitor opera sobre ella.</div>
+        <div class="filter-sub">Son patrones complementarios, no competidores. Interpreter te da el árbol de objetos que representa las reglas. Visitor te permite agregar operaciones sobre ese árbol sin tocar sus clases. La jerarquía que Interpreter define es exactamente la que Visitor recorre.</div>
+      </div>
+
+      <div class="table-wrap" style="margin-top:12px;">
+        <table class="study-table">
+          <thead><tr><th>Dimensión</th><th>Visitor</th><th>Interpreter</th></tr></thead>
+          <tbody>
+            <tr><td class="accent">Propósito</td><td>Agregar <strong>operaciones</strong> sin cambiar clases</td><td>Representar una <strong>gramática</strong> y evaluarla</td></tr>
+            <tr><td class="accent">Mecanismo</td><td>Double dispatch (accept + visit)</td><td>Recursión (nodo evalúa sus hijos)</td></tr>
+            <tr><td class="accent">Flexible ante</td><td>Nuevas operaciones → agregar Visitor</td><td>Nuevas reglas → recombinar terminales</td></tr>
+            <tr><td class="accent">Frágil ante</td><td>Nuevos tipos de nodo → tocar todos los Visitors</td><td>Gramáticas complejas → explotan en clases</td></tr>
+            <tr><td class="accent">Relación con Composite</td><td>Opera sobre un Composite existente</td><td>Es un Composite que se autoevalúa</td></tr>
+            <tr><td class="accent">Patrón que compite</td><td>Strategy (si solo hace falta 1 algoritmo)</td><td>Specification Pattern (DDD) · Chain of Responsibility</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="alert-box" style="margin-top:12px;">
+        <div class="alert-title">Anti-patterns para no olvidar en el examen</div>
+        <div class="alert-body">
+          <strong>Visitor todopoderoso:</strong> un Visitor que accede a detalles internos de cada nodo en vez de operar solo a través de la interfaz pública — rompe encapsulamiento.<br><br>
+          <strong>God Grammar (Interpreter):</strong> el DSL crece hasta ser un lenguaje de programación completo, no documentado y sin tooling — peor que el código que reemplazó.
+        </div>
+      </div>
+    </div>
+
+    <!-- 06 CHEAT SHEET -->
+    <div class="section">
+      <div class="section-header">
+        <span class="sec-num">06</span>
+        <span class="sec-title">Cheat Sheet — Referencia Rápida</span>
+      </div>
+
+      <div class="table-wrap">
+        <table class="study-table">
+          <thead><tr><th>GoF</th><th>Familia</th><th>GRASP base</th><th>Cuándo metés uno</th><th>Trampa número 1</th></tr></thead>
+          <tbody>
+            <tr><td class="accent">Singleton</td><td>Creacional</td><td>Pure Fabrication</td><td>Solo hay UNA instancia legítima del dominio</td><td>Estado global no mockeable → tests difíciles</td></tr>
+            <tr><td class="accent">Factory Method</td><td>Creacional</td><td>Pure Fabrication + Polimorfismo</td><td>El tipo a crear depende de parámetro/config</td><td>Factory para crear una sola clase concreta</td></tr>
+            <tr><td class="accent">Abstract Factory</td><td>Creacional</td><td>Polimorfismo</td><td>Familias de objetos que deben ser compatibles entre sí</td><td>Sobrediseño con una sola familia</td></tr>
+            <tr><td class="accent">Builder</td><td>Creacional</td><td>Alta Cohesión</td><td>Objeto complejo con muchos pasos de construcción</td><td>Para objetos simples sobra</td></tr>
+            <tr><td class="accent">Prototype</td><td>Creacional</td><td>—</td><td>Clonar configuraciones similares</td><td>Clonado superficial vs profundo</td></tr>
+            <tr><td class="accent">Adapter</td><td>Estructural</td><td>Indirección + Bajo Acoplamiento</td><td>Integrar librería externa / sistema legacy</td><td>Usarlo para parchear interfaz propia</td></tr>
+            <tr><td class="accent">Decorator</td><td>Estructural</td><td>Polimorfismo + Alta Cohesión</td><td>Combinar comportamientos opcionales dinámicamente</td><td>Difícil debuggear con muchos decorators</td></tr>
+            <tr><td class="accent">Strategy</td><td>Comportamiento</td><td>Polimorfismo + Indirección</td><td>Varias formas de hacer lo mismo, intercambiables</td><td>Strategy con una sola implementación</td></tr>
+            <tr><td class="accent">Observer</td><td>Comportamiento</td><td>Indirección + Bajo Acoplamiento</td><td>Varios objetos reaccionan al mismo evento</td><td>Observadores que bloquean al publicador</td></tr>
+            <tr><td class="accent">State</td><td>Comportamiento</td><td>Polimorfismo + Alta Cohesión</td><td>Entidad con ciclo de vida bien definido del análisis</td><td>30 estados × 15 métodos → revisar modelo</td></tr>
+            <tr><td class="accent" style="color:var(--signal);">Visitor</td><td>Comportamiento</td><td>Polimorfismo</td><td>Nuevas ops sobre jerarquía estable de objetos</td><td>Jerarquía volátil → todos los Visitors se tocan</td></tr>
+            <tr><td class="accent" style="color:var(--signal);">Interpreter</td><td>Comportamiento</td><td>Polimorfismo + Composite</td><td>Mini-lenguaje de reglas simples recombinables</td><td>Gramática compleja → usar parser real (ANTLR)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="two-col" style="margin-top:12px;">
+        <div class="theme-block">
+          <div class="theme-header">
+            <div class="theme-tag">Errores comunes</div>
+            <div class="theme-name">Para no repetir en el parcial</div>
+          </div>
+          <div class="theme-body">
+            <div class="pill-list">
+              <span class="pill bad">God Classes (baja cohesión)</span>
+              <span class="pill bad">Métodos en el Modelo de Dominio</span>
+              <span class="pill bad">No delegar — decidir afuera</span>
+              <span class="pill bad">Acoplar a clases concretas</span>
+              <span class="pill bad">Nombres genéricos (Manager, Helper)</span>
+              <span class="pill bad">Saltarse el modelo y codear directo</span>
+              <span class="pill bad">Patternitis — meter patrones sin necesidad</span>
+              <span class="pill bad">Singleton para "evitar pasar parámetros"</span>
+            </div>
+          </div>
+        </div>
+        <div class="theme-block">
+          <div class="theme-header">
+            <div class="theme-tag">Conexión GRASP → GoF</div>
+            <div class="theme-name">Si entendés GRASP, GoF es obvio</div>
+          </div>
+          <div class="theme-body">
+            <div class="pill-list">
+              <span class="pill">Singleton = Pure Fabrication</span>
+              <span class="pill">Factory Method = Pure Fabrication + Polimorfismo</span>
+              <span class="pill">Adapter = Indirección</span>
+              <span class="pill">Decorator = Polimorfismo</span>
+              <span class="pill">Strategy = Polimorfismo + Indirección</span>
+              <span class="pill">Observer = Indirección + Bajo Acoplamiento</span>
+              <span class="pill">State = Polimorfismo + Alta Cohesión</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="report-footer">
+      <div class="footer-brand">Rodrigo Sarain · Reckless Studios</div>
+      <div class="footer-meta">17 Ago 2026 · Modelado y Diseño de Sistemas · Parcial 2 — Prof. Ing. Fernando Bono · AUSI UNC</div>
+    </div>
+
+  </div>
+</div>
+</div>
+</body>
+</html>
