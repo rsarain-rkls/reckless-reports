@@ -4,3 +4,8 @@ desktop.ini
 *.tmp
 
 .vercel
+
+# Engram — memoria persistente versionada (viaja con el repo)
+# .engram/ se versiona completo (chunks + manifest)
+# .codegraph/ se regenera solo, no viaja
+.codegraph/
