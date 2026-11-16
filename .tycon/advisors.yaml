@@ -1,0 +1,26 @@
+# .tycon/advisors.yaml — Reckless OS
+#
+# DOS EQUIPOS conviven en el mismo sistema:
+#
+# ─── EQUIPO CREATIVO (modo default de este repo) ───────────────────────────
+# Agentes: RANGO / Jean Pierre / Vloron / VERA / LIRA
+# Flujo: Reckless Strategy (Entender → Construir → Transferencia) + SDD
+# Packs: ninguno — no corre código en este repo
+# Advisors activos: validador de story, seguridad básica, scope, cobertura de criterios
+#
+# ─── EQUIPO DEV (modo por proyecto cliente) ─────────────────────────────────
+# Para proyectos de código (eliana-web, napoli-web, portfolio, etc.),
+# el repo cliente configura sus propios packs en su .tycon/advisors.yaml.
+# Desde ese repo: packs: [all] o lista específica (react, dotnet, etc.)
+# NO configurar desde acá — cada repo cliente es autónomo.
+#
+# CÓMO ACTIVAR MODO DEV en un repo cliente:
+#   .tycon/advisors.yaml en el repo:
+#     packs: [all]
+#   o por variable de entorno (una sesión):
+#     TYCON_PACKS_DEFAULT=all
+#
+# ────────────────────────────────────────────────────────────────────────────
+
+# Sin packs de stack: este repo es operativo/creativo, no de código
+packs: []
